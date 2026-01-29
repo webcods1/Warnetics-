@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Terminal, ChevronDown } from 'lucide-react';
+import { Terminal, ChevronDown, Code, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -42,7 +43,8 @@ const Navbar = () => {
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                {/* Centered Desktop Nav Links */}
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
                     {navItems.map((item) => (
                         <div key={item.name} className="relative group"
                             onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.name)}
@@ -72,14 +74,14 @@ const Navbar = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 10 }}
                                             transition={{ duration: 0.2 }}
-                                            className="absolute top-full left-0 mt-4 w-64 bg-white rounded-lg shadow-xl py-2 z-50 text-gray-800"
+                                            className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 w-64 bg-white rounded-lg shadow-xl py-2 z-50 text-gray-800"
                                         >
-                                            <div className="absolute -top-2 left-4 w-4 h-4 bg-white transform rotate-45 border-t border-l border-gray-100"></div>
+                                            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-100"></div>
                                             {services.map((service, idx) => (
                                                 <Link
                                                     key={idx}
                                                     to="/services"
-                                                    className="block px-4 py-3 text-sm hover:bg-gray-50 hover:text-blue-600 transition-colors border-b border-gray-50 last:border-0"
+                                                    className="block px-4 py-3 text-sm hover:bg-gray-50 hover:text-blue-600 transition-colors border-b border-gray-50 last:border-0 text-left"
                                                 >
                                                     {service}
                                                 </Link>
@@ -90,6 +92,10 @@ const Navbar = () => {
                             )}
                         </div>
                     ))}
+                </div>
+
+                {/* Right Side Button */}
+                <div className="hidden md:flex items-center">
                     <button className="px-6 py-2 bg-blue-600/10 border border-blue-500/50 text-blue-500 rounded-sm hover:bg-blue-500 hover:text-white transition-all duration-300 font-mono text-xs uppercase tracking-widest flex items-center gap-2">
                         <Terminal size={14} />
                         Client Portal
@@ -98,23 +104,22 @@ const Navbar = () => {
 
                 {/* Mobile Toggle */}
                 <button
-                    className="md:hidden text-white z-50 relative focus:outline-none"
+                    className="md:hidden text-green-500 z-50 relative focus:outline-none"
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    <div className="w-6 h-5 flex flex-col justify-between">
-                        <motion.span
-                            animate={isOpen ? { rotate: 45, y: 9 } : { rotate: 0, y: 0 }}
-                            className="w-full h-0.5 bg-white block transition-colors duration-300"
-                        />
-                        <motion.span
-                            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-                            className="w-full h-0.5 bg-white block transition-colors duration-300"
-                        />
-                        <motion.span
-                            animate={isOpen ? { rotate: -45, y: -9 } : { rotate: 0, y: 0 }}
-                            className="w-full h-0.5 bg-white block transition-colors duration-300"
-                        />
-                    </div>
+                    {isOpen ? (
+                        <motion.div
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                        >
+                            <X className="w-8 h-8 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+                        </motion.div>
+                    ) : (
+                        <div className="w-8 h-8 flex items-center justify-center">
+                            <Code className="w-8 h-8 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                        </div>
+                    )}
                 </button>
             </div>
 
@@ -135,38 +140,61 @@ const Navbar = () => {
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 h-full w-3/4 max-w-sm bg-[#0a192f] border-l border-blue-900/50 z-40 md:hidden shadow-[-10px_0_30px_rgba(0,0,0,0.5)] flex flex-col pt-24 px-6"
+                            className="fixed inset-0 w-full h-full bg-[#0a192f] z-40 md:hidden flex flex-col justify-center items-center overflow-y-auto"
                         >
-                            <div className="flex flex-col gap-6">
+                            <div className="flex flex-col gap-8 w-full max-w-md px-6 text-center">
                                 {navItems.map((item) => (
-                                    <div key={item.name}>
-                                        <Link
-                                            to={item.path}
-                                            className="text-xl font-bold text-white hover:text-blue-400 transition-colors flex items-center justify-between"
-                                            onClick={() => !item.hasDropdown && setIsOpen(false)}
-                                        >
-                                            {item.name}
-                                            {item.hasDropdown && <ChevronDown size={18} className={`transition-transform duration-300 ${activeDropdown === item.name ? 'rotate-180' : ''}`} />}
-                                        </Link>
+                                    <div key={item.name} className="flex flex-col items-center">
+                                        <div className="flex items-center gap-4">
+                                            <Link
+                                                to={item.path}
+                                                className="text-3xl font-bold text-white hover:text-blue-400 transition-colors"
+                                                onClick={() => !item.hasDropdown && setIsOpen(false)}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                            {item.hasDropdown && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setMobileServicesOpen(!mobileServicesOpen);
+                                                    }}
+                                                    className="p-2 focus:outline-none"
+                                                >
+                                                    <ChevronDown
+                                                        size={24}
+                                                        className={`text-white transition-transform duration-300 ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                                                    />
+                                                </button>
+                                            )}
+                                        </div>
                                         {item.hasDropdown && (
-                                            <div className="pl-4 mt-3 border-l-2 border-blue-500/20 space-y-3">
-                                                {services.map((service, idx) => (
-                                                    <Link
-                                                        key={idx}
-                                                        to="/services"
-                                                        onClick={() => setIsOpen(false)}
-                                                        className="block text-sm text-gray-400 hover:text-blue-400 transition-colors"
+                                            <AnimatePresence>
+                                                {mobileServicesOpen && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: "auto", opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        className="overflow-hidden w-full"
                                                     >
-                                                        {service}
-                                                    </Link>
-                                                ))}
-                                            </div>
+                                                        <div className="mt-4 space-y-4 border-l-2 border-blue-500/20 pl-4 w-full text-left bg-black/20 p-4 rounded-lg">
+                                                            {services.map((service, idx) => (
+                                                                <Link
+                                                                    key={idx}
+                                                                    to="/services"
+                                                                    onClick={() => setIsOpen(false)}
+                                                                    className="block text-lg text-gray-400 hover:text-blue-400 transition-colors"
+                                                                >
+                                                                    {service}
+                                                                </Link>
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         )}
                                     </div>
                                 ))}
-                                <button className="mt-8 w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase tracking-widest text-sm rounded transition-colors shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-                                    Client Portal
-                                </button>
                             </div>
                         </motion.div>
                     </>
