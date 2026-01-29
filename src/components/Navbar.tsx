@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { Terminal, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,8 +16,18 @@ const Navbar = () => {
             setScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     const services = [
         "Endpoint protection",
@@ -34,7 +45,7 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a192f]/90 backdrop-blur-md border-b border-blue-500/20 py-1' : 'bg-transparent py-2'}`}>
+        <nav className={`fixed w-full transition-all duration-300 ${isOpen ? 'z-[120] bg-transparent border-none' : 'z-50'} ${!isOpen && scrolled ? 'bg-[#0a192f]/90 backdrop-blur-md border-b border-blue-500/20 py-1' : 'py-2'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
                 <Link to="/" className="flex items-center gap-2 group">
                     <div className="relative">
@@ -104,99 +115,103 @@ const Navbar = () => {
 
                 {/* Mobile Toggle */}
                 <button
-                    className="md:hidden text-white z-50 relative focus:outline-none"
+                    className="md:hidden text-white z-[120] relative focus:outline-none"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <div className="w-8 h-6 flex flex-col justify-between items-end group">
                         <motion.span
-                            animate={isOpen ? { rotate: 45, y: 10, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
+                            animate={isOpen ? { rotate: 45, y: 11, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
                             className="h-0.5 bg-blue-500 block transition-colors duration-300 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
                         />
                         <motion.span
-                            animate={isOpen ? { rotate: -45, y: -10, width: "100%" } : { rotate: 0, y: 0, width: "70%" }}
+                            animate={isOpen ? { rotate: -45, y: -11, width: "100%" } : { rotate: 0, y: 0, width: "70%" }}
                             className="h-0.5 bg-blue-500 block transition-colors duration-300 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
                         />
                     </div>
                 </button>
             </div>
 
-            {/* Mobile Nav */}
-            {/* Mobile Sidebar */}
-            <AnimatePresence>
-                {isOpen && (
-                    <>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
-                        />
+            {/* Mobile Nav - Rendered via Portal */}
+            {createPortal(
+                <AnimatePresence>
+                    {isOpen && (
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed inset-0 w-full h-full bg-[#0a192f] z-40 md:hidden flex flex-col justify-center items-center overflow-y-auto"
+                            className="fixed inset-0 w-full h-full bg-[#020617] z-[100] md:hidden flex flex-col justify-center items-center"
                         >
-                            <div className="flex flex-col gap-8 w-full max-w-md px-6 text-center">
-                                {navItems.map((item) => (
-                                    <div key={item.name} className="flex flex-col items-center">
-                                        <div className="flex items-center gap-4">
-                                            <Link
-                                                to={item.path}
-                                                className="text-3xl font-bold text-white hover:text-blue-400 transition-colors"
-                                                onClick={() => !item.hasDropdown && setIsOpen(false)}
-                                            >
-                                                {item.name}
-                                            </Link>
-                                            {item.hasDropdown && (
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setMobileServicesOpen(!mobileServicesOpen);
-                                                    }}
-                                                    className="p-2 focus:outline-none"
+                            <div className="absolute inset-0 overflow-y-auto w-full h-full flex flex-col justify-center items-center">
+
+                                {/* Interactive Background for Mobile Menu */}
+                                <div className="absolute inset-0 pointer-events-none opacity-20">
+                                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px] animate-pulse"></div>
+                                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/20 rounded-full blur-[100px] animate-pulse delay-700"></div>
+                                </div>
+
+
+
+                                <div className="flex flex-col gap-8 w-full max-w-md px-6 text-center relative z-10">
+                                    {navItems.map((item) => (
+                                        <div key={item.name} className="flex flex-col items-center">
+                                            <div className="flex items-center gap-4">
+                                                <Link
+                                                    to={item.path}
+                                                    className="text-3xl font-bold text-white hover:text-blue-400 transition-colors"
+                                                    onClick={() => !item.hasDropdown && setIsOpen(false)}
                                                 >
-                                                    <ChevronDown
-                                                        size={24}
-                                                        className={`text-white transition-transform duration-300 ${mobileServicesOpen ? 'rotate-180' : ''}`}
-                                                    />
-                                                </button>
+                                                    {item.name}
+                                                </Link>
+                                                {item.hasDropdown && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setMobileServicesOpen(!mobileServicesOpen);
+                                                        }}
+                                                        className="p-2 focus:outline-none"
+                                                    >
+                                                        <ChevronDown
+                                                            size={24}
+                                                            className={`text-white transition-transform duration-300 ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                                                        />
+                                                    </button>
+                                                )}
+                                            </div>
+                                            {item.hasDropdown && (
+                                                <AnimatePresence>
+                                                    {mobileServicesOpen && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: "auto", opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            className="overflow-hidden w-full"
+                                                        >
+                                                            <div className="mt-6 space-y-6 w-full flex flex-col items-center">
+                                                                {services.map((service, idx) => (
+                                                                    <Link
+                                                                        key={idx}
+                                                                        to="/services"
+                                                                        onClick={() => setIsOpen(false)}
+                                                                        className="block text-xl text-gray-400 hover:text-white transition-colors text-center font-medium"
+                                                                    >
+                                                                        {service}
+                                                                    </Link>
+                                                                ))}
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
                                             )}
                                         </div>
-                                        {item.hasDropdown && (
-                                            <AnimatePresence>
-                                                {mobileServicesOpen && (
-                                                    <motion.div
-                                                        initial={{ height: 0, opacity: 0 }}
-                                                        animate={{ height: "auto", opacity: 1 }}
-                                                        exit={{ height: 0, opacity: 0 }}
-                                                        className="overflow-hidden w-full"
-                                                    >
-                                                        <div className="mt-6 space-y-6 w-full flex flex-col items-center">
-                                                            {services.map((service, idx) => (
-                                                                <Link
-                                                                    key={idx}
-                                                                    to="/services"
-                                                                    onClick={() => setIsOpen(false)}
-                                                                    className="block text-xl text-gray-400 hover:text-white transition-colors text-center font-medium"
-                                                                >
-                                                                    {service}
-                                                                </Link>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        )}
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </nav>
     );
 };
