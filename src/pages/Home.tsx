@@ -1,13 +1,29 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Lock, Activity, ArrowUp, ArrowRight, Target, Cpu, Zap } from 'lucide-react';
 import MatrixRain from '../components/MatrixRain';
+import HackerText from '../components/HackerText';
 
 
 const Home = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [textIndex, setTextIndex] = useState(0);
     const targetRef = useRef(null);
+
+    const heroTexts = [
+        { prefix: "FORTIFY YOUR", highlight: "DIGITAL ASSETS" },
+        { prefix: "SECURE YOUR", highlight: "INFRASTRUCTURE" },
+        { prefix: "ELIMINATE", highlight: "VULNERABILITIES" },
+        { prefix: "PROTECT YOUR", highlight: "ENTERPRISE" }
+    ];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTextIndex((prev) => (prev + 1) % heroTexts.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
     const { scrollYProgress } = useScroll({
         target: targetRef,
         offset: ["start start", "end start"]
@@ -34,14 +50,16 @@ const Home = () => {
                         <span className="text-xs font-mono uppercase tracking-widest">System Secure • 24/7 Monitoring</span>
                     </motion.div>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-6xl md:text-8xl font-black mb-6 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500"
-                    >
-                        FORTIFY YOUR <br /><span className="text-blue-500">DIGITAL ASSETS</span>
-                    </motion.h1>
+                    <div className="h-[200px] flex items-center justify-center mb-6">
+                        <h1 className="text-4xl md:text-8xl font-black tracking-tighter text-center">
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 block mb-2">
+                                <HackerText text={heroTexts[textIndex].prefix} speed={40} />
+                            </span>
+                            <span className="text-blue-500 block">
+                                <HackerText text={heroTexts[textIndex].highlight} speed={40} />
+                            </span>
+                        </h1>
+                    </div>
 
                     <motion.p
                         initial={{ opacity: 0, y: 30 }}
