@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    /* Utilizing Tailwind v4 theme variables directly or just relying on utility classes in standard tags */
+    background-color: var(--color-gray-50);
+    color: var(--color-gray-900);
+  }
+}
