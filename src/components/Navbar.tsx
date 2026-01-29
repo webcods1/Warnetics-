@@ -177,13 +177,13 @@ const Navbar = () => {
                                                         exit={{ height: 0, opacity: 0 }}
                                                         className="overflow-hidden w-full"
                                                     >
-                                                        <div className="mt-4 space-y-4 border-l-2 border-blue-500/20 pl-4 w-full text-left bg-black/20 p-4 rounded-lg">
+                                                        <div className="mt-6 space-y-6 w-full flex flex-col items-center">
                                                             {services.map((service, idx) => (
                                                                 <Link
                                                                     key={idx}
                                                                     to="/services"
                                                                     onClick={() => setIsOpen(false)}
-                                                                    className="block text-lg text-gray-400 hover:text-blue-400 transition-colors"
+                                                                    className="block text-xl text-gray-400 hover:text-white transition-colors text-center font-medium"
                                                                 >
                                                                     {service}
                                                                 </Link>

@@ -63,6 +63,63 @@ const Home = () => {
             </section>
 
 
+
+            {/* Feature Section */}
+            <section className="py-24 bg-[#0a192f]/50 relative overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col md:flex-row items-center gap-16">
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="flex-1"
+                        >
+                            <h3 className="text-blue-500 font-mono text-sm uppercase tracking-widest mb-4">
+                                Proactive Defense
+                            </h3>
+                            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                                Stay Ahead of <br />
+                                <span className="text-white">Cyber Threats</span>
+                            </h2>
+                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                                In a landscape where threats evolve daily, passive defense is no longer enough.
+                                Our team of elite security researchers actively hunts for vulnerabilities
+                                in your infrastructure before malicious actors can exploit them.
+                            </p>
+                            <div className="flex items-center gap-4 text-sm font-mono text-blue-400">
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    Real-time Analysis
+                                </span>
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    Zero-day Detection
+                                </span>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="flex-1 relative"
+                        >
+                            <div className="relative z-10 rounded-2xl overflow-hidden border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.1)]">
+                                <img
+                                    src="/home1.png"
+                                    alt="Cybersecurity Analysis"
+                                    className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay"></div>
+                            </div>
+                            {/* Decorative elements */}
+                            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+                            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
             {/* Stats/Trust Section */}
             <section className="py-20 border-y border-white/5 bg-black">
                 <div className="container mx-auto px-6">
