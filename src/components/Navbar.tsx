@@ -62,7 +62,7 @@ const Navbar = () => {
                             onMouseLeave={() => item.hasDropdown && setActiveDropdown(null)}>
                             <Link
                                 to={item.path}
-                                className={`relative text-sm font-medium tracking-wide transition-colors duration-300 flex items-center gap-1 ${location.pathname.startsWith(item.path) && item.name !== 'Home' ? 'text-blue-500' :
+                                className={`relative font-mono text-sm font-medium tracking-wide transition-colors duration-300 flex items-center gap-1 ${location.pathname.startsWith(item.path) && item.name !== 'Home' ? 'text-blue-500' :
                                     (location.pathname === item.path ? 'text-blue-500' : 'text-gray-400 hover:text-white')
                                     }`}
                             >
@@ -158,7 +158,7 @@ const Navbar = () => {
                                             <div className="flex items-center gap-4">
                                                 <Link
                                                     to={item.path}
-                                                    className="text-3xl font-bold text-white hover:text-blue-400 transition-colors"
+                                                    className="text-3xl font-mono font-bold text-white hover:text-blue-400 transition-colors"
                                                     onClick={() => !item.hasDropdown && setIsOpen(false)}
                                                 >
                                                     {item.name}
@@ -193,7 +193,7 @@ const Navbar = () => {
                                                                         key={idx}
                                                                         to="/services"
                                                                         onClick={() => setIsOpen(false)}
-                                                                        className="block text-xl text-gray-400 hover:text-white transition-colors text-center font-medium"
+                                                                        className="block text-xl font-mono text-gray-400 hover:text-white transition-colors text-center font-medium"
                                                                     >
                                                                         {service}
                                                                     </Link>

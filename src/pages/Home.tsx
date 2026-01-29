@@ -1,9 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+
 import { ShieldCheck, Lock, Activity, ArrowUp, ArrowRight, Target, Cpu, Zap } from 'lucide-react';
 import MatrixRain from '../components/MatrixRain';
 import HackerText from '../components/HackerText';
+import Counter from '../components/Counter';
 
 
 const Home = () => {
@@ -343,17 +345,82 @@ const Home = () => {
                 <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
             </section>
 
+            {/* AI Security Section */}
+            <section className="py-24 bg-[#020617] relative overflow-hidden border-t border-white/5">
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                        {/* Left: Image */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="relative"
+                        >
+                            <div className="relative z-10 rounded-3xl overflow-hidden border border-blue-500/20 shadow-2xl shadow-blue-500/10 group">
+                                <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay group-hover:bg-transparent transition-colors duration-500"></div>
+                                <img
+                                    src="/ai_security.png"
+                                    alt="AI Powered Security"
+                                    className="w-full h-auto transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                            </div>
+                            {/* Decorative elements behind image */}
+                            <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-[80px]"></div>
+                            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-[80px]"></div>
+                        </motion.div>
+
+                        {/* Right: Content */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                        >
+                            <div className="inline-block px-4 py-2 rounded-full bg-purple-900/20 border border-purple-500/30 text-purple-400 mb-6 font-mono text-xs uppercase tracking-widest">
+                                Next-Gen Intelligence
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                                Autonomous <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Defense Systems</span>
+                            </h2>
+                            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                                Staying ahead of cyber threats requires more than just reaction—it demands prediction. Our proprietary AI engines analyze millions of patterns in real-time to identify and neutralize zero-day vectors before they penetrate your perimeter.
+                            </p>
+
+                            <ul className="space-y-4 mb-10">
+                                {[
+                                    "Real-time Threat Prediction",
+                                    "Self-Learning Adaptive Firewalls",
+                                    "Zero-False Positive Anomaly Detection"
+                                ].map((item, i) => (
+                                    <li key={i} className="flex items-center text-gray-300">
+                                        <span className="w-2 h-2 rounded-full bg-blue-500 mr-4 shadow-[0_0_10px_#3b82f6]"></span>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <Link to="/about" className="group flex items-center gap-4 text-white font-bold tracking-widest uppercase text-sm hover:text-blue-400 transition-colors">
+                                Explore The Tech
+                                <div className="w-12 h-px bg-white/20 group-hover:bg-blue-500 transition-colors"></div>
+                            </Link>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
             {/* Stats/Trust Section */}
             <section className="py-10 md:py-20 border-y border-white/5 bg-black">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                         {[
-                            { label: 'Vulnerabilities Found', value: '10k+' },
-                            { label: 'Enterprise Clients', value: '500+' },
-                            { label: 'Success Rate', value: '100%' },
+                            { label: 'Vulnerabilities Found', value: 10, suffix: 'k+' },
+                            { label: 'Enterprise Clients', value: 10, suffix: '+' },
+                            { label: 'Success Rate', value: 100, suffix: '%' },
                         ].map((stat, i) => (
                             <div key={i} className="p-6 border border-white/5 rounded-lg hover:border-blue-500/30 transition-colors group">
-                                <h3 className="text-4xl font-bold text-white mb-2 group-hover:text-blue-500 transition-colors">{stat.value}</h3>
+                                <h3 className="text-4xl font-bold text-white mb-2 group-hover:text-blue-500 transition-colors flex items-center justify-center gap-1">
+                                    <Counter from={0} to={stat.value} duration={2.5} />
+                                    <span>{stat.suffix}</span>
+                                </h3>
                                 <p className="text-gray-500 font-mono text-sm uppercase tracking-wider">{stat.label}</p>
                             </div>
                         ))}
