@@ -1,10 +1,12 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { ShieldCheck, Lock, Activity, ArrowUp, Target, Cpu, Zap } from 'lucide-react';
 import MatrixRain from '../components/MatrixRain';
 
 
 const Home = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
     const targetRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: targetRef,
@@ -129,6 +131,151 @@ const Home = () => {
                         </motion.div>
                     </div>
                 </div>
+            </section>
+
+
+            {/* Security Protocols Section */}
+            <section className="py-24 bg-white relative">
+
+                <div className="container mx-auto px-6 relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl md:text-6xl font-black mb-4 tracking-tight text-slate-900">
+                            ADVANCED <span className="text-blue-600">PROTOCOLS</span>
+                        </h2>
+                        <p className="text-slate-500 max-w-2xl mx-auto font-mono text-sm uppercase tracking-widest">
+                            Implementing Military-Grade Security Standards
+                        </p>
+                    </motion.div>
+
+                    <div className="relative max-w-2xl mx-auto h-[400px] flex items-center justify-center">
+                        <div className="relative w-full h-full flex items-center justify-center">
+                            <AnimatePresence mode='popLayout'>
+                                {[
+                                    {
+                                        icon: <ShieldCheck className="text-blue-600" size={48} />,
+                                        title: "Infrastructural Shield",
+                                        desc: "Hardening cloud and on-premise infrastructure against persistent threats with automated perimeter defense systems."
+                                    },
+                                    {
+                                        icon: <Lock className="text-cyan-600" size={48} />,
+                                        title: "Zero Trust Architecture",
+                                        desc: "Strict identity verification for every person and device trying to access resources, ensuring internal security."
+                                    },
+                                    {
+                                        icon: <Activity className="text-purple-600" size={48} />,
+                                        title: "Continuous Oversight",
+                                        desc: "Automated systems monitoring traffic patterns for anomalous behavior 24/7, with instant incident reporting."
+                                    }
+                                ].map((item, idx) => {
+                                    // Calculate relative position based on activeIndex
+                                    const total = 3;
+                                    const position = (idx - activeIndex + total) % total;
+
+                                    return (
+                                        <motion.div
+                                            key={idx}
+                                            initial={false}
+                                            animate={{
+                                                scale: 1 - position * 0.05,
+                                                y: position * 40,
+                                                opacity: 1 - position * 0.3,
+                                                zIndex: total - position,
+                                            }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                            className="absolute w-full max-w-md p-10 bg-blue-50 border border-blue-100 rounded-[2rem] shadow-xl group cursor-pointer"
+                                            onClick={() => setActiveIndex((idx + 1) % 3)}
+                                        >
+                                            <div className="mb-8 p-4 bg-white rounded-2xl inline-block shadow-sm group-hover:scale-110 transition-transform">
+                                                {item.icon}
+                                            </div>
+                                            <h3 className="text-2xl font-bold mb-4 text-slate-900">{item.title}</h3>
+                                            <p className="text-slate-600 leading-relaxed text-lg">{item.desc}</p>
+                                        </motion.div>
+                                    );
+                                })}
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Navigation Arrow */}
+                        <motion.button
+                            whileTap={{ scale: 0.9, backgroundColor: "#2563eb", color: "#ffffff" }}
+                            onClick={() => setActiveIndex((prev) => (prev + 1) % 3)}
+                            className="absolute -right-4 md:-right-20 top-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center text-blue-600 shadow-xl hover:bg-blue-600 hover:text-white transition-all duration-300 z-50 group scale-90 md:scale-100"
+                        >
+                            <ArrowUp size={32} className="group-hover:-translate-y-1 transition-transform" />
+                        </motion.button>
+                    </div>
+                </div>
+
+                {/* Subtle Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+            </section>
+
+            {/* What Makes Us Unique Section */}
+            <section className="py-24 bg-[#0a192f]/30 relative overflow-hidden">
+                <div className="container mx-auto px-6 relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="mb-16"
+                    >
+                        <h2 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
+                            WHAT MAKES US <span className="text-blue-500">UNIQUE</span>
+                        </h2>
+                        <div className="h-1 w-20 bg-blue-500 rounded-full"></div>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                        {[
+                            {
+                                icon: <Target className="text-blue-500" size={32} />,
+                                title: "Offensive Mindset",
+                                desc: "Our team consists of elite ethical hackers who use the same techniques as real adversaries to stress-test your systems."
+                            },
+                            {
+                                icon: <Cpu className="text-cyan-500" size={32} />,
+                                title: "Proprietary Intelligence",
+                                desc: "We deploy custom-built AI vulnerability scanners that identify zero-day threats long before traditional commercial tools."
+                            },
+                            {
+                                icon: <Zap className="text-blue-400" size={32} />,
+                                title: "Rapid Remediation",
+                                desc: "Security shouldn't wait. Our average detection-to-fix timeline is 70% faster than industry standard."
+                            }
+                        ].map((item, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: idx * 0.2 }}
+                                className="group"
+                            >
+                                <div className="mb-6 relative">
+                                    <div className="absolute -inset-2 bg-blue-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="relative p-4 bg-black/40 border border-white/5 rounded-xl inline-block group-hover:border-blue-500/50 transition-colors">
+                                        {item.icon}
+                                    </div>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-blue-400 transition-colors">{item.title}</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    {item.desc}
+                                </p>
+                                <motion.div
+                                    className="mt-6 h-0.5 bg-blue-500/30 w-0 group-hover:w-full transition-all duration-500"
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Background decorative elements */}
+                <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
             </section>
 
             {/* Stats/Trust Section */}
