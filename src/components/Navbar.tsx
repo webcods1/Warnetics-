@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Terminal, ChevronDown, Code, X } from 'lucide-react';
+import { Terminal, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
@@ -44,7 +44,7 @@ const Navbar = () => {
 
                 {/* Desktop Nav */}
                 {/* Centered Desktop Nav Links */}
-                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-8">
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-16">
                     {navItems.map((item) => (
                         <div key={item.name} className="relative group"
                             onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.name)}
@@ -104,22 +104,19 @@ const Navbar = () => {
 
                 {/* Mobile Toggle */}
                 <button
-                    className="md:hidden text-green-500 z-50 relative focus:outline-none"
+                    className="md:hidden text-white z-50 relative focus:outline-none"
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    {isOpen ? (
-                        <motion.div
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                        >
-                            <X className="w-8 h-8 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-                        </motion.div>
-                    ) : (
-                        <div className="w-8 h-8 flex items-center justify-center">
-                            <Code className="w-8 h-8 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-                        </div>
-                    )}
+                    <div className="w-8 h-6 flex flex-col justify-between items-end group">
+                        <motion.span
+                            animate={isOpen ? { rotate: 45, y: 10, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
+                            className="h-0.5 bg-blue-500 block transition-colors duration-300 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+                        />
+                        <motion.span
+                            animate={isOpen ? { rotate: -45, y: -10, width: "100%" } : { rotate: 0, y: 0, width: "70%" }}
+                            className="h-0.5 bg-blue-500 block transition-colors duration-300 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+                        />
+                    </div>
                 </button>
             </div>
 

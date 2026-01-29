@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import MatrixRain from '../components/MatrixRain';
 
 
@@ -16,7 +17,7 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-[#020617] text-white overflow-hidden">
             {/* Hero Section */}
-            <section ref={targetRef} className="h-screen relative flex items-center justify-center pt-20">
+            <section ref={targetRef} className="h-auto min-h-[70vh] md:h-screen relative flex items-start md:items-center justify-center pt-28 md:pt-20 pb-20 md:pb-0">
                 <motion.div style={{ opacity, scale }} className="text-center z-10 px-4 max-w-5xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -50,6 +51,16 @@ const Home = () => {
                         We identify vulnerabilities before the adversaries do.
                     </motion.p>
 
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                    >
+                        <Link to="/contact" className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase tracking-widest rounded transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1">
+                            Let's Start
+                        </Link>
+                    </motion.div>
+
 
                 </motion.div>
 
@@ -65,9 +76,9 @@ const Home = () => {
 
 
             {/* Feature Section */}
-            <section className="py-24 bg-[#0a192f]/50 relative overflow-hidden">
+            <section className="py-12 md:py-24 bg-[#0a192f]/50 relative overflow-hidden">
                 <div className="container mx-auto px-6">
-                    <div className="flex flex-col md:flex-row items-center gap-16">
+                    <div className="flex flex-col-reverse md:flex-row items-center gap-16">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -102,7 +113,7 @@ const Home = () => {
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8 }}
-                            className="flex-1 relative"
+                            className="flex-1 relative -mt-8 md:mt-0"
                         >
                             <div className="relative z-10 rounded-2xl overflow-hidden border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.1)]">
                                 <img
@@ -121,7 +132,7 @@ const Home = () => {
             </section>
 
             {/* Stats/Trust Section */}
-            <section className="py-20 border-y border-white/5 bg-black">
+            <section className="py-10 md:py-20 border-y border-white/5 bg-black">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                         {[
