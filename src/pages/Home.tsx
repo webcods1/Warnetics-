@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Lock, Activity, ArrowUp, Target, Cpu, Zap } from 'lucide-react';
+import { ShieldCheck, Lock, Activity, ArrowUp, ArrowRight, Target, Cpu, Zap } from 'lucide-react';
 import MatrixRain from '../components/MatrixRain';
 
 
@@ -152,7 +152,8 @@ const Home = () => {
                         </p>
                     </motion.div>
 
-                    <div className="relative max-w-2xl mx-auto h-[400px] flex items-center justify-center">
+                    {/* Mobile View: Stacked Slider */}
+                    <div className="md:hidden relative max-w-2xl mx-auto h-[400px] flex items-center justify-center">
                         <div className="relative w-full h-full flex items-center justify-center">
                             <AnimatePresence mode='popLayout'>
                                 {[
@@ -205,10 +206,45 @@ const Home = () => {
                         <motion.button
                             whileTap={{ scale: 0.9, backgroundColor: "#2563eb", color: "#ffffff" }}
                             onClick={() => setActiveIndex((prev) => (prev + 1) % 3)}
-                            className="absolute -right-4 md:-right-20 top-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center text-blue-600 shadow-xl hover:bg-blue-600 hover:text-white transition-all duration-300 z-50 group scale-90 md:scale-100"
+                            className="absolute -right-4 top-1/2 -translate-y-1/2 w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center text-blue-600 shadow-xl hover:bg-blue-600 hover:text-white transition-all duration-300 z-50 group scale-90"
                         >
                             <ArrowUp size={32} className="group-hover:-translate-y-1 transition-transform" />
                         </motion.button>
+                    </div>
+
+                    {/* Desktop View: Horizontal Grid */}
+                    <div className="hidden md:grid grid-cols-3 gap-8 relative z-10">
+                        {[
+                            {
+                                icon: <ShieldCheck className="text-blue-600" size={40} />,
+                                title: "Infrastructural Shield",
+                                desc: "Hardening cloud and on-premise infrastructure against persistent threats with automated perimeter defense systems."
+                            },
+                            {
+                                icon: <Lock className="text-cyan-600" size={40} />,
+                                title: "Zero Trust Architecture",
+                                desc: "Strict identity verification for every person and device trying to access resources, ensuring internal security."
+                            },
+                            {
+                                icon: <Activity className="text-purple-600" size={40} />,
+                                title: "Continuous Oversight",
+                                desc: "Automated systems monitoring traffic patterns for anomalous behavior 24/7, with instant incident reporting."
+                            }
+                        ].map((item, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                className="p-8 bg-blue-50 border border-blue-100 rounded-3xl shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+                            >
+                                <div className="mb-6 p-4 bg-white rounded-2xl inline-block shadow-sm group-hover:scale-110 transition-transform">
+                                    {item.icon}
+                                </div>
+                                <h3 className="text-xl font-bold mb-4 text-slate-900">{item.title}</h3>
+                                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
 
@@ -272,6 +308,17 @@ const Home = () => {
                             </motion.div>
                         ))}
                     </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="mt-16 text-center"
+                    >
+                        <Link to="/services" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600/10 border border-blue-500/50 text-blue-500 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300 font-bold uppercase tracking-widest text-sm group">
+                            Discover More
+                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </motion.div>
                 </div>
 
                 {/* Background decorative elements */}
